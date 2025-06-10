@@ -1,6 +1,6 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import Post from '@/assets/components/post'
 
 const home = () => {
@@ -17,7 +17,7 @@ const home = () => {
     username: 'Blnd Dyar',
     pfp: require('@/assets/images/pfp.jpg'),
     postParagraph: 'This is Home Icon if you didnt knew already.',
-    postImage: require('@/assets/images/home.png')},
+    postImage: require('@/assets/images/Home.png')},
     {id:4 ,
     username: 'Baxtawar kaify',
     pfp: require('@/assets/images/pfp.jpg'),
@@ -28,38 +28,35 @@ const home = () => {
   ]
     
   return (
-    <SafeAreaProvider>
-      <Text style={styles.text}>Welcome To ICTE Community!</Text>
-      <>
+    <SafeAreaView>
+      <View style={styles.createPostContainer}>
+      <Text>Share Your Questions or Findings Here</Text>
+      <TouchableOpacity style={styles.createPostButton}><Text>Create Post</Text></TouchableOpacity>
+      </View>
       <FlatList 
       data={posts}
       keyExtractor={item => item.id}
-      renderItem={
-        ({item}) => (
-        <>
-         <Post {...item}/>
-         </>
-      )}
-      numColumns={1}
-      
+      renderItem={({item}) => (<Post {...item}/>)}
       />
-      </>
-    </SafeAreaProvider>
+    </SafeAreaView>
   )
 }
 
 export default home
 
 const styles = StyleSheet.create({
-  text:{
-    fontSize: 40,
-    fontFamily: "arial",
-    fontWeight: "bold",
-    color: "#292929",
-    textAlign: 'center',
-    margin:  'auto',
-    textShadowColor: '#888',
-    textShadowOffset: { width: 3, height: 3 },
-    textShadowRadius: 10,
+  
+  createPostContainer:{
+    flexDirection: 'row',
+    maxWidth: '95%',
+    margin: 20,
+    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    borderRadius: 20,
+  },
+  createPostButton:{
+    backgroundColor: 'rgb(30, 83, 255)',
+    borderRadius: 20,
+    padding: 10,
   }
 })

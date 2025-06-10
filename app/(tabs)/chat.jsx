@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const chat = () => {
@@ -18,8 +18,10 @@ const styles = StyleSheet.create({
     fontFamily: "arial",
     fontWeight: "bold",
     color: "#292929",
-    padding: 20,
     textAlign: 'center',
     margin:  'auto',
+    textShadowColor: '#888',
+    textShadowOffset: { width: 3, height: 3 },
+    textShadowRadius: 10,
   }
 })

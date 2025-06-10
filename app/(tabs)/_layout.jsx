@@ -1,66 +1,52 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
-import { Tabs } from 'expo-router'
-
-import React from 'react'
-
+import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { Tabs } from 'expo-router';
+import { BlurView } from 'expo-blur';
+import React from 'react';
+import Icon from '@/assets/components/icon';
 
 const _layout = () => {
   return (
-  <Tabs screenOptions={{
-    tabBarShowLabel: false,
-    tabBarIconStyle: {
-      height: '100%',
-      width: '100%',
-      padding: 15,
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'relative',
-    },
-    tabBarStyle: {
-      borderRadius: 20,
-      backgroundColor: '#2',
-      borderWidth: 1,
-      borderColor: '#212121',
-      marginHorizontal: 20,
-      marginBottom: 10,
-      height: 58,
-
-    }
-  }} >
+   <Tabs
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          position: 'absolute',
+          backgroundColor: 'rgba(255, 255, 255, 0.5)', 
+          borderRadius: 20,
+          marginHorizontal: 30,
+          marginBottom: 10,
+          height: 55,
+          maxWidth: 600,
+        },
+        // tabBarBackground: () => (
+        //   <BlurView tint="light" intensity={100} style={[StyleSheet.absoluteFill,{borderRadius: 10}]} />
+        // ),
+        tabBarIconStyle: {
+          height: '100%',
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 4,
+        },
+      }}
+    >
       <Tabs.Screen 
       name="index"
       options={{
         headerShown: false, 
         
         tabBarIcon: ({focused}) => (
-          <>
-          <ImageBackground >
-          <Image source={require("@/assets/images/home.png")} 
-          style={
-            { maxHeight: 30 , maxWidth: 30, margin: 'auto'}
-          }/>
-          <Text>Home</Text>
-          </ImageBackground>
-          </>
-        ),
+          <Icon name={'Home'} 
+          imagePath={focused ? require('@/assets/images/HomeColor.png') : require('@/assets/images/Home.png') }/>),
       }}
       
       />
       <Tabs.Screen 
       name="chat"
       options={{
-        headerShown: false, 
-        
+      headerShown: false, 
         tabBarIcon: ({focused}) => (
-          <>
-          <ImageBackground >
-          <Image source={require("@/assets/images/chat.png")} 
-          style={
-            { maxHeight: 30 , maxWidth: 30, margin: 'auto'}
-          }/>
-          <Text>Chat</Text>
-          </ImageBackground>
-          </>
+          <Icon name={'Chat'} imagePath={focused ? require('@/assets/images/ChatColor.png') : require('@/assets/images/Chat.png')}/>
         ),
       }}
       
@@ -68,43 +54,19 @@ const _layout = () => {
       <Tabs.Screen 
       name="lectures"
       options={{
-        headerShown: false, 
-        
-        tabBarIcon: ({focused}) => (
-          <>
-          <ImageBackground >
-          <Image source={require("@/assets/images/leacture.png")} 
-          style={
-            { maxHeight: 30 , maxWidth: 30, margin: 'auto'}
-          }/>
-          <Text>Lecture</Text>
-          </ImageBackground>
-          </>
-        ),
+      headerShown: false, 
+      tabBarIcon: ({focused}) => (<Icon name={'Lecture'} imagePath={focused ? require('@/assets/images/LectureColor.png') : require('@/assets/images/Lecture.png')}/> ),
       }}
-      
       />
       <Tabs.Screen 
       name="profile"
       options={{
-        headerShown: false, 
-        
-        tabBarIcon: ({focused}) => (
-          <>
-          <ImageBackground >
-          <Image source={require("@/assets/images/profile.png")} 
-          style={
-            { maxHeight: 30 , maxWidth: 30, margin: 'auto'}
-          }/>
-          <Text>Profile</Text>
-          </ImageBackground>
-          </>
-        ),
+      headerShown: false, 
+      tabBarIcon: ({focused}) => (
+        <Icon name={'Profile'} imagePath={focused ? require('@/assets/images/ProfileColor.png') : require('@/assets/images/Profile.png')} /> ),
       }}
-      
       />
     </Tabs>
-    
     )
 }
 
