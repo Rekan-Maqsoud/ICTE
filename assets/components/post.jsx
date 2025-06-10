@@ -1,19 +1,22 @@
-import { View, Text, StyleSheet, Image, ScrollView, Touchable, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
 
-const Post = () => {
+const Post = ({id , username ,pfp , postImage, postParagraph}) => {
+ 
   return (
     <View style={style.postCard}>
-      <View style={{flex:1 ,flexDirection: 'row'}}>
-        <Image source={require("@/assets/images/home.png")} style={style.pfp}/> 
-        <Text style={style.username}>user name</Text>
+      <View style={{flexDirection: 'row'}}>
+        <Image source={pfp} style={style.pfpStyle}/> 
+        <Text style={style.username}>{username}</Text>
         <TouchableOpacity style={style.options}>
             <Text style={{fontSize: 20,fontWeight: 'bold'}}>...</Text>
         </TouchableOpacity>
       </View>
-      <View style={{flex: 8}}>
-        <Text style={style.postText}> Post Paragraph </Text>
-        <Image style={style.postImage}source={require("@/assets/images/home.png")}/>
+      <View>
+        <Text style={style.postText}> {postParagraph} </Text>
+        {postImage != null &&
+        (<Image style={style.postImageStyle} source={postImage}/>)
+        }
       </View>
     </View>
   )
@@ -22,26 +25,26 @@ const Post = () => {
 export default Post
 
 const style = StyleSheet.create ({
-    pfp: {
+    pfpStyle: {
         maxHeight: 40,
         maxWidth: 40,
         marginHorizontal: 10,
+        borderRadius: 20,
     },
     postCard:{
-        maxWidth: '95%',
-        maxHeight: '60%',
-        height: 680,
-        width: 400,
-        marginHorizontal: 10,
-        marginVertical: 15,
-        padding: 10,
-        borderRadius: 10,
+        marginHorizontal: 20,
+        marginVertical: 10,
+        padding: 8,
+        borderRadius: 15,
         backgroundColor: '#f9f9f9',
-        // shadowColor: '#000',
-        // shadowOffset: {width: 0,height: 2},
-        // shadowOpacity: 0.3,
-        // shadowRadius: 3.84,
+        shadowColor: '#000',
+        shadowOffset: {width: 0,height: 2},
+        shadowOpacity: 0.3,
+        shadowRadius: 3.84,
         elevation: 5,
+        maxHeight: 370,
+        resizeMode: 'contain'
+        
     },
     postText: {
         padding:10,
@@ -52,13 +55,15 @@ const style = StyleSheet.create ({
         fontSize: 18,
         color: '#414141',
     },
-    postImage:{
-        flex: 1,
-        height: 380,
-        width: 380,
+    postImageStyle:{
+        resizeMode: 'contain',
+        marginButtom: 10,
+        maxHeight: 280,
+        width: '100%',
     },
     options:{
         position: 'absolute',
         right: 10,
+        top: -8,
     }
 })
