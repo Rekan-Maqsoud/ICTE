@@ -1,6 +1,6 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import {  StyleSheet } from 'react-native';
 import { Tabs } from 'expo-router';
-import { BlurView } from 'expo-blur';
+
 import React from 'react';
 import Icon from '@/assets/components/icon';
 
@@ -18,9 +18,6 @@ const _layout = () => {
           height: 55,
           maxWidth: 600,
         },
-        // tabBarBackground: () => (
-        //   <BlurView tint="light" intensity={100} style={[StyleSheet.absoluteFill,{borderRadius: 10}]} />
-        // ),
         tabBarIconStyle: {
           height: '100%',
           width: '100%',
@@ -48,6 +45,17 @@ const _layout = () => {
         tabBarIcon: ({focused}) => (
           <Icon name={'Chat'} imagePath={focused ? require('@/assets/images/ChatColor.png') : require('@/assets/images/Chat.png')}/>
         ),
+      }}
+      
+      />
+      <Tabs.Screen 
+      name="createPost"
+      options={{
+        headerShown: false, 
+        
+        tabBarIcon: ({focused}) => (
+          <Icon name={'Post'} 
+          imagePath={focused ? require('@/assets/images/plusColor.png') : require('@/assets/images/plus.png') }/>),
       }}
       
       />

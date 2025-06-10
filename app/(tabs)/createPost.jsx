@@ -1,0 +1,115 @@
+import { StyleSheet, Text , View , TouchableOpacity , Image, TextInput, Alert} from 'react-native'
+import React, { useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import * as ImagePicker from 'expo-image-picker'
+
+const createPost = () => {
+  const [text , setText] = useState('');
+  const [selectedImage , setSelectedImage] = useState(null);
+  const [username , setUserame] = useState('Rekan M Koye');
+
+  const pickImage = async() => {
+    const {states} =  await ImagePicker.requestMediaLibraryPermissionsAsync();
+    // if (states !== 'granted'){
+    //   Alert.alert('Permission Required',
+    //     'Sorry, we need camera roll permissions to make this work!',
+    //     [{ text: 'OK' }])
+    //     return;
+    // }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+    if(!result.canceled)
+      setSelectedImage(result.assets[0].uri)
+  }
+
+  return (
+    <SafeAreaView>
+      <View style={style.container}>
+      <View style={{flexDirection: 'row', }}>
+              <Image source={17} style={style.pfpStyle}/> 
+              <Text style={style.usernameStyle}>{username}</Text>
+              <TouchableOpacity style={style.options}>
+                  <Text style={{fontSize: 20,fontWeight: 'bold'}}>...</Text>
+              </TouchableOpacity>
+      </View>
+      <View style={{flexWrap: 'wrap'}}>
+        <TextInput 
+        style={style.input}
+        placeholder="Type here..."
+        value={text}
+        multiline={true}
+        onChangeText={setText}
+      />{!selectedImage ? 
+      <TouchableOpacity onPress={pickImage}><Text style={{fontSize: 20,fontWeight: 'bold'}}>Add Image</Text></TouchableOpacity> :
+      <View style={{position: 'relative', backgroundColor: 'rgba(149, 255, 255, 0.05)'}}>
+        <Image style={style.postImageStyle} source={{uri: selectedImage}}/>
+        <TouchableOpacity style={style.cancelImage} onPress={() => setSelectedImage(null)}>
+          <Image style={{height:20,width:20}}source={require('@/assets/images/x.png')} />
+        </TouchableOpacity>
+      </View>
+      }
+      </View>
+      </View>
+    </SafeAreaView>
+  )
+}
+
+export default createPost
+
+const style = StyleSheet.create({
+  container:{
+    marginHorizontal: 20,
+    marginVertical: 50,
+    padding: 8,
+    borderRadius: 15,
+    backgroundColor: '#f9f9f9',
+    shadowColor: '#000',
+    shadowOffset: {width: 0,height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+    elevation: 5,
+    maxHeight: '90%',
+    resizeMode: 'contain'
+  },
+  pfpStyle: {
+        maxHeight: 40,
+        maxWidth: 40,
+        marginHorizontal: 10,
+        borderRadius: 20,
+    },
+    usernameStyle: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#414141',
+    },
+    options:{
+        position: 'absolute',
+        right: 10,
+        top: -8,
+    },
+    input:{
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      maxWidth: '90%',
+      padding:10 ,
+      margin: 10,
+      
+    },
+    postImageStyle:{
+        resizeMode: 'contain',
+        marginButtom: 10,
+        maxHeight: 480,
+        minHeight: 480,
+        minWidth: '95%',
+        margin: 10,
+
+    },
+    cancelImage: {
+      top: 20,
+      right: 15,
+      position: 'absolute'
+    },
+
+})

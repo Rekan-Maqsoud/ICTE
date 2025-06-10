@@ -1,6 +1,6 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList } from 'react-native'
 import React from 'react'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import {  SafeAreaView } from 'react-native-safe-area-context'
 import Post from '@/assets/components/post'
 
 const home = () => {
@@ -23,16 +23,9 @@ const home = () => {
     pfp: require('@/assets/images/pfp.jpg'),
     postParagraph: 'hhhhh',
   postImage: require('@/assets/images/Hori.jpg')}
-  
-  
   ]
-    
   return (
     <SafeAreaView>
-      <View style={styles.createPostContainer}>
-      <Text>Share Your Questions or Findings Here</Text>
-      <TouchableOpacity style={styles.createPostButton}><Text>Create Post</Text></TouchableOpacity>
-      </View>
       <FlatList 
       data={posts}
       keyExtractor={item => item.id}
@@ -43,20 +36,3 @@ const home = () => {
 }
 
 export default home
-
-const styles = StyleSheet.create({
-  
-  createPostContainer:{
-    flexDirection: 'row',
-    maxWidth: '95%',
-    margin: 20,
-    alignItems: 'center',
-    backgroundColor: '#f9f9f9',
-    borderRadius: 20,
-  },
-  createPostButton:{
-    backgroundColor: 'rgb(30, 83, 255)',
-    borderRadius: 20,
-    padding: 10,
-  }
-})

@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
 
-const Post = ({id , username ,pfp , postImage, postParagraph}) => {
+const Post = ({ username ,pfp , postImage, postParagraph}) => {
  
   return (
     <View style={style.postCard}>
@@ -50,16 +49,17 @@ const style = StyleSheet.create ({
         padding:10,
         color: '#212121',
     },
-    username: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: '#414141',
-    },
+    
     postImageStyle:{
         resizeMode: 'contain',
         marginButtom: 10,
         maxHeight: 280,
         width: '100%',
+    },
+    username: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#414141',
     },
     options:{
         position: 'absolute',
