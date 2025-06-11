@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 
-const Post = ({ username ,pfp , postImage, postParagraph}) => {
- 
+const Post = ({ username  , postImage, postParagraph}) => {
+  const pfp = 14;
+  console.log(postImage)
   return (
     <View style={style.postCard}>
       <View style={{flexDirection: 'row'}}>
@@ -13,8 +14,9 @@ const Post = ({ username ,pfp , postImage, postParagraph}) => {
       </View>
       <View>
         <Text style={style.postText}> {postParagraph} </Text>
-        {postImage != null &&
-        (<Image style={style.postImageStyle} source={postImage}/>)
+        {postImage  &&
+        (<Image style={style.postImageStyle} 
+          source={{ uri: postImage}} />)
         }
       </View>
     </View>
@@ -41,9 +43,8 @@ const style = StyleSheet.create ({
         shadowOpacity: 0.3,
         shadowRadius: 3.84,
         elevation: 5,
-        maxHeight: 370,
+        maxHeight: 490,
         resizeMode: 'contain'
-        
     },
     postText: {
         padding:10,
@@ -52,11 +53,11 @@ const style = StyleSheet.create ({
     
     postImageStyle:{
         resizeMode: 'contain',
-        marginButtom: 10,
-        maxHeight: 280,
+        marginBottom: 10,
+        maxHeight: 380,
+        height: '100%',
         width: '100%',
-    },
-    username: {
+    },username: {
         fontWeight: 'bold',
         fontSize: 18,
         color: '#414141',

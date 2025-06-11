@@ -1,35 +1,35 @@
-import { FlatList } from 'react-native'
-import React from 'react'
+import { FlatList , View , Image } from 'react-native'
+import React, {  useCallback, useEffect, useState } from 'react'
 import {  SafeAreaView } from 'react-native-safe-area-context'
 import Post from '@/assets/components/post'
+import { getPosts} from '@/assets/appwritedb'
+import { useFocusEffect } from '@react-navigation/native'
 
 const home = () => {
-  const posts =[{id:1 ,
-    username: 'Rekan M Koye',
-    pfp: require('@/assets/images/pfp.jpg'),
-    postParagraph: 'Welcome to my application!'},
-    {id:2 ,
-    username: 'Danar Marizan',
-    pfp: require('@/assets/images/pfp.jpg'),
-    postParagraph: 'This workout plan is Amazing',
-    postImage: require('@/assets/images/vertical.jpg')},
-    {id:3 ,
-    username: 'Blnd Dyar',
-    pfp: require('@/assets/images/pfp.jpg'),
-    postParagraph: 'This is Home Icon if you didnt knew already.',
-    postImage: require('@/assets/images/Home.png')},
-    {id:4 ,
-    username: 'Baxtawar kaify',
-    pfp: require('@/assets/images/pfp.jpg'),
-    postParagraph: 'hhhhh',
-  postImage: require('@/assets/images/Hori.jpg')}
-  ]
+  const [post , setPost] = useState(null);
+  const [refreshing, setRefreshing] = useState(false)
+  const fetchPosts = async () => {
+  const posts = await getPosts()
+    setPost(posts)
+  }
+  
+  useFocusEffect(useCallback(() => {fetchPosts()}, []))
+
+  const onRefresh = async () => {
+    setRefreshing(true)
+    await fetchPosts()
+    setRefreshing(false)
+  }
+  if(post)
+  console.log('index file post ',post[0].postImage)
   return (
     <SafeAreaView>
       <FlatList 
-      data={posts}
-      keyExtractor={item => item.id}
+      data={post || []}
+      keyExtractor={item => item.$id}
       renderItem={({item}) => (<Post {...item}/>)}
+      refreshing={refreshing}
+       onRefresh={onRefresh}
       />
     </SafeAreaView>
   )
