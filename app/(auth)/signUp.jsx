@@ -3,13 +3,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../AuthContext'
-import { useRouter } from 'expo-router'
 
-const signIn = () => {
+const signUp = () => {
   const { setLoggedIn } = useContext(AuthContext);
   const [email , setEmail] = useState('')
   const [password , setPassword] = useState('')
-  const router = useRouter() ;
+
   
   const handleLogIn = async () => {
       const result = await logIn(email,password);
@@ -20,7 +19,7 @@ const signIn = () => {
     <SafeAreaView >
 
       <View style={styles.container}>
-        <Text style={styles.formLabel}>Log In</Text>
+        <Text style={styles.formLabel}>Create a New Account</Text>
 
       <Text style={styles.label}>Email </Text>
       <TextInput 
@@ -40,19 +39,14 @@ const signIn = () => {
 
       <TouchableOpacity onPress={handleLogIn} 
       style={styles.loginButton}>
-        <Text style={styles.buttonText}>Log In</Text>
-      </TouchableOpacity>
-
-      <Text>Dont have an account? </Text>
-      <TouchableOpacity onPress={()=> {router.replace('/(auth)/signUp')}}style={styles.signInButton }>
-        <Text style={[styles.buttonText , styles.signInButton]}>Sign Up</Text>
+        <Text style={styles.buttonText}>Create Account</Text>
       </TouchableOpacity>
       </View>
     </SafeAreaView>
   )
 }
 
-export default signIn
+export default signUp
 
 const styles = StyleSheet.create({
   formLabel:{
@@ -104,7 +98,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(99, 208, 255, 0.62)',
     borderRadius: 10,
   },
-  signInButton:{
-    color: 'rgba(31, 77, 97, 0.66)',
-  }
 })

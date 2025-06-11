@@ -1,12 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { logout } from '@/assets/appwritedb'
+import { router } from 'expo-router'
 
 const profile = () => {
+  const handleLogout = async( ) => {
+    logout();
+    // router.replace('/(auth)/signIn')
+  }
   return (
     
     <SafeAreaProvider>
-      <Text style={styles.text}>Your Profile Will Appear Here!</Text>
+      <TouchableOpacity onPress={handleLogout}><Text style={styles.text}>Log Out</Text></TouchableOpacity>
     </SafeAreaProvider>
   )
 }

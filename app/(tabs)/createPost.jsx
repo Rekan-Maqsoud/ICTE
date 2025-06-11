@@ -1,17 +1,22 @@
 import { StyleSheet, Text , View , TouchableOpacity , Image, TextInput, Alert, ScrollView} from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
-import { newPost, uploadedURL } from '@/assets/appwritedb'
+import { CheckLoginStates, newPost, uploadedURL } from '@/assets/appwritedb'
 import { useRouter } from 'expo-router'
 
 const createPost = () => {
   const [text , setText] = useState('');
   const [selectedImage , setSelectedImage] = useState('');
-  const [username , setUserame] = useState('Rekan M Koye');
+  const [username , setUserame] = useState('Dear Student');
   const router = useRouter();
-  const date = Date.now();
-
+  useEffect(()=>{
+    getUser()
+  },[])
+  const getUser = async ()=>{
+    const result = await CheckLoginStates();
+    setUserame(result.name)
+  }
   const pickImage = async() => {
     const {states} =  await ImagePicker.requestMediaLibraryPermissionsAsync();
     // if (states !== 'granted'){

@@ -12,16 +12,12 @@ const home = () => {
   const posts = await getPosts()
     setPost(posts)
   }
-  
   useFocusEffect(useCallback(() => {fetchPosts()}, []))
-
   const onRefresh = async () => {
     setRefreshing(true)
     await fetchPosts()
     setRefreshing(false)
   }
-  if(post)
-  console.log('index file post ',post[0].postImage)
   return (
     <SafeAreaView>
       <FlatList 
