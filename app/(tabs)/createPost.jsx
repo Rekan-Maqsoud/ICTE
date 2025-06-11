@@ -1,4 +1,4 @@
-import { StyleSheet, Text , View , TouchableOpacity , Image, TextInput, Alert} from 'react-native'
+import { StyleSheet, Text , View , TouchableOpacity , Image, TextInput, Alert, ScrollView} from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
@@ -41,6 +41,7 @@ const createPost = () => {
   }
   return (
     <SafeAreaView>
+      <ScrollView>
       <View style={style.container}>
       <View style={{flexDirection: 'row', }}>
               <Image source={14} style={style.pfpStyle}/> 
@@ -56,6 +57,7 @@ const createPost = () => {
         value={text}
         multiline={true}
         onChangeText={setText}
+        maxLength={300}
       />
       </View>
       <View style={{marginTop: 70,}}>
@@ -74,6 +76,7 @@ const createPost = () => {
         </TouchableOpacity>
         </View>
       </View>
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -92,12 +95,11 @@ const style = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 3.84,
     elevation: 5,
-    maxHeight: '90%',
     resizeMode: 'contain'
   },
   pfpStyle: {
-        maxHeight: 40,
-        maxWidth: 40,
+        height: 40,
+        width: 40,
         marginHorizontal: 10,
         borderRadius: 20,
     },
