@@ -7,7 +7,7 @@ import { router } from 'expo-router'
 const profile = () => {
   const handleLogout = async( ) => {
     logout();
-    // router.replace('/(auth)/signIn')
+    router.replace('/(auth)/signIn')
   }
   return (
     

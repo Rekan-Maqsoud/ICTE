@@ -38,7 +38,6 @@ const createPost = () => {
     let url = '';
   if (selectedImage) 
     url = await uploadedURL(selectedImage);
-    console.log(url);
     await newPost(username,text,url)
     setText(null);
     setSelectedImage(null);

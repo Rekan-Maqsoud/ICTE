@@ -1,26 +1,46 @@
-import { logIn } from '@/assets/appwritedb'
+import { createNewAccount, logIn } from '@/assets/appwritedb'
 import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../AuthContext'
+import {useRouter } from 'expo-router'
 
 const signUp = () => {
   const { setLoggedIn } = useContext(AuthContext);
+  const [name , setName]= useState('')
   const [email , setEmail] = useState('')
   const [password , setPassword] = useState('')
-
-  
-  const handleLogIn = async () => {
+  const [confirmPassword , setConfirmPassword] = useState('')
+  const router = useRouter()
+  async function handleSignUp  (){
+    try{
+    if(password === confirmPassword){
+      await createNewAccount(email,password,name)
       const result = await logIn(email,password);
-      if(result.user)
-        setLoggedIn(true);
+        if(result.user){
+          setLoggedIn(true);
+          router.replace('/')
+        }
+      Alert.alert('Account Successfully Created !')
+    }
+    else
+    Alert.alert('Confirm Your Password correctly!')
+  }catch(error){
+    console.log(error)
+  }
   }
   return (
     <SafeAreaView >
-
       <View style={styles.container}>
         <Text style={styles.formLabel}>Create a New Account</Text>
 
+      <Text style={styles.label}>Full Name</Text>
+      <TextInput 
+      style={styles.inputFields }
+      placeholder='Name ...' 
+      onChangeText={(text) => setName(text)}
+
+      />
       <Text style={styles.label}>Email </Text>
       <TextInput 
       style={styles.inputFields }
@@ -36,8 +56,15 @@ const signUp = () => {
       onChangeText={(text) => setPassword(text)}
       secureTextEntry
       />
+      <Text style={styles.label}>Confirm Password</Text>
+      <TextInput 
+      style={styles.inputFields }
+      placeholder='Confirm Password ...' 
+      onChangeText={(text) => setConfirmPassword(text)}
+      secureTextEntry
+      />
 
-      <TouchableOpacity onPress={handleLogIn} 
+      <TouchableOpacity onPress={handleSignUp} 
       style={styles.loginButton}>
         <Text style={styles.buttonText}>Create Account</Text>
       </TouchableOpacity>
@@ -65,7 +92,7 @@ const styles = StyleSheet.create({
   container:{
     margin: 20,
     marginVertical: 80,
-    height: 600,
+    height: 700,
     alignContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgb(255, 255, 255)',

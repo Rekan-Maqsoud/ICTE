@@ -1,16 +1,30 @@
+import { Platform } from "react-native";
 import { Account, Client, Databases, ID, Storage } from "react-native-appwrite";
 const database_id = process.env.EXPO_PUBLIC_DB_ID;
 const profile = process.env.EXPO_PUBLIC_DB_PROFILE_ID;
 const postRef = process.env.EXPO_PUBLIC_DB_POSTS_ID;
 const postStorage = process.env.EXPO_PUBLIC_STORAGE_POSTS;
-const clint = new Client()
+const client = new Client()
     .setEndpoint(process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT)
     .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID)
-    .setPlatform('com.rekan.icte')
-const database = new Databases(clint);
-const storage = new Storage(clint);
-const account = new Account(clint);
 
+if(Platform.OS == 'android')
+    client.setPlatform('com.rekan.icte')
+else if (Platform.OS == 'ios')
+    client.setPlatform('com.rekan.icte')
+
+const database = new Databases(client);
+const storage = new Storage(client);
+const account = new Account(client);
+
+export const createNewAccount = async(email,password, name) =>{
+    await account.create(ID.unique(),email,password,name);
+    await database.createDocument(database_id,profile,ID.unique(),{
+        name: name,
+        email: email,
+        password: password,
+    })
+}
 export const logIn = async(email , password) => {
     try {
     const response = await account.createEmailPasswordSession(email , password)
@@ -26,11 +40,12 @@ export const logout = async ()=>{
 export const CheckLoginStates = async( ) => {
     try {
     const response = await account.getSession('current')
+    console.log(response)
+    if(response){
     const userID = await account.get();
-    return userID
+    return userID}
     }catch(error){
-        if(error !== '[AppwriteException: User (role: guests) missing scope (account)]')
-        console.error(error)
+        
     }
 }
 
