@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     color: 'rgba(31,31,31,0.8)'
   },
   label:{
+    color: 'rgba(31,31,31,0.7)',
     alignSelf: 'flex-start',
     margin: 10,
     fontSize: 20,
@@ -107,6 +108,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   inputFields:{
+    color: 'rgba(31,31,31,0.7)',
     fontSize: 18,
     backgroundColor: 'rgba(255, 255, 255, 0.29)',
     borderRadius: 10,
@@ -115,7 +117,8 @@ const styles = StyleSheet.create({
     margin: 5,
     height: 65,
     width: '90%'
-  },buttonText:{
+  },
+  buttonText:{
     fontSize: 18,
     fontWeight: 'semibold',
 

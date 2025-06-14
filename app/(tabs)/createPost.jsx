@@ -35,7 +35,6 @@ const createPost = () => {
     let url = '';
   if (selectedImage) 
     url = await uploadedURL(selectedImage);
-  
     await newPost(name,text,url)
     setLoading(false)
     setText(null);
@@ -109,6 +108,7 @@ const style = StyleSheet.create({
         borderRadius: 20,
     },
     nameStyle: {
+      color: 'rgba(31,31,31,0.7)',
         fontWeight: 'bold',
         fontSize: 18,
         color: '#414141',
@@ -119,6 +119,7 @@ const style = StyleSheet.create({
         top: -8,
     },
     input:{
+      color: 'rgba(31,31,31,0.7)',
       flexDirection: 'row',
       flexWrap: 'wrap',
       maxWidth: '90%',

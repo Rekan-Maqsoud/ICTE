@@ -1,15 +1,21 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext } from 'react'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { logout } from '@/assets/appwritedb'
 import { useRouter } from 'expo-router'
 import { AuthContext } from '../AuthContext'
 
 const profile = () => {
-  const {setLoggedIn , setCurrentUser, setLoading} = useContext(AuthContext);
+  const {LoggedIn, setLoggedIn , setCurrentUser, setLoading} = useContext(AuthContext);
   const router = useRouter();
   const handleLogout = async( ) => {
-    setLoading(true);
+    
+    if(LoggedIn) {
+      setCurrentUser('')
+      setLoading(false);
+      router.replace('/(auth)/signIn')
+      return;
+    }
+    
     await logout();
     await setLoggedIn(false);
     setCurrentUser('')
@@ -18,8 +24,11 @@ const profile = () => {
     
   }
   return (
-    
-      <TouchableOpacity onPress={handleLogout}><Text style={styles.text}>Log Out</Text></TouchableOpacity>
+      <View>
+      <TouchableOpacity onPress={handleLogout}>
+      <Text style={styles.text}>Log Out</Text>
+      </TouchableOpacity> 
+      </View>
     
   )
 }
