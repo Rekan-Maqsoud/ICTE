@@ -1,24 +1,48 @@
-import { logIn } from '@/assets/appwritedb'
+import { CheckLoginStates, logIn } from '@/assets/appwritedb'
 import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../AuthContext'
 import { useRouter } from 'expo-router'
 
 const signIn = () => {
-  const { setLoggedIn } = useContext(AuthContext);
+  const { setLoggedIn , setLoading , setCurrentUser , setName} = useContext(AuthContext);
   const [email , setEmail] = useState('')
   const [password , setPassword] = useState('')
   const router = useRouter() ;
   
+  useEffect( ()=>{
+    init();
+  }, [])
+  const init = async() => {
+    setLoading(true);
+    const result = await CheckLoginStates();
+    if(result.$id){
+      setLoggedIn(true)
+      await setCurrentUser(result);
+      await setName(result.name)
+      router.replace('/');
+    }
+    setLoading(false);
+  };
+
+
   const handleLogIn = async () => {
+      setLoading(true)
+      try{
       const result = await logIn(email,password);
-      if(result.user)
+      if(result){
         setLoggedIn(true);
+        setCurrentUser(result);
+      setName(result.name)
+        router.replace('/')
+      }
+      }catch(error){
+        Alert.alert(`${error}`);}
+      setLoading(false)
   }
   return (
     <SafeAreaView >
-
       <View style={styles.container}>
         <Text style={styles.formLabel}>Log In</Text>
 
@@ -27,7 +51,6 @@ const signIn = () => {
       style={styles.inputFields }
       placeholder='Email ...' 
       onChangeText={(text) => setEmail(text)}
-
       />
       
       <Text style={styles.label}>Password</Text>
@@ -44,7 +67,7 @@ const signIn = () => {
       </TouchableOpacity>
 
       <Text>Dont have an account? </Text>
-      <TouchableOpacity onPress={()=> {router.replace('/(auth)/signUp')}}style={styles.signInButton }>
+      <TouchableOpacity onPress={()=> {router.push('/(auth)/signUp')}}style={styles.signInButton }>
         <Text style={[styles.buttonText , styles.signInButton]}>Sign Up</Text>
       </TouchableOpacity>
       </View>

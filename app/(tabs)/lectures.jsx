@@ -4,9 +4,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const lectures = () => {
   return (
-    <SafeAreaProvider>
+    
       <Text style={styles.text}>Your Lectures Will Appear Here!</Text>
-    </SafeAreaProvider>
+    
   )
 }
 

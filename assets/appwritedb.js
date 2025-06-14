@@ -1,4 +1,5 @@
-import { Platform } from "react-native";
+import { use } from "react";
+import { Alert, Platform } from "react-native";
 import { Account, Client, Databases, ID, Storage } from "react-native-appwrite";
 const database_id = process.env.EXPO_PUBLIC_DB_ID;
 const profile = process.env.EXPO_PUBLIC_DB_PROFILE_ID;
@@ -31,25 +32,26 @@ export const logIn = async(email , password) => {
     const userID = await account.get();
     return {user: userID, state: response}
     }catch(error){
-        console.error(error)
-    }
+    Alert.alert(`${error}`);}
 }
 export const logout = async ()=>{
+    try{
     await account.deleteSession('current')
+        }catch(error){
+    Alert.alert(`${error}`);}
 }
 export const CheckLoginStates = async( ) => {
-    try {
-    const response = await account.getSession('current')
-    console.log(response)
+    try{
+    const response = await account.getSession('current');
     if(response){
     const userID = await account.get();
-    return userID}
-    }catch(error){
-        
+    return userID
+    }}
+    catch(error){
+        return false;
     }
+ 
 }
-
-
 
 export const getPosts = async () => {
     const {documents , total} = await database.listDocuments(database_id, postRef)

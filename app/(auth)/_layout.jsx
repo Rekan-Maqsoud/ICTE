@@ -1,9 +1,7 @@
 import { Stack } from 'expo-router';
-import {  StyleSheet } from 'react-native';
-
 const _layout = () => {
   return (
-    <Stack>
+    <Stack screenOptions={{headerShown: false}}>
     <Stack.Screen name='signIn'
     options={{headerShown: false}}/>
 
@@ -12,7 +10,4 @@ const _layout = () => {
     </Stack>
     )
 }
-
 export default _layout
-
-const styles = StyleSheet.create({})

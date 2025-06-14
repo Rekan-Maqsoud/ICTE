@@ -1,23 +1,19 @@
-import { StyleSheet, Text , View , TouchableOpacity , Image, TextInput, Alert, ScrollView} from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text , View , TouchableOpacity , Image, TextInput, ScrollView} from 'react-native'
+import React, { useContext, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
-import { CheckLoginStates, newPost, uploadedURL } from '@/assets/appwritedb'
+import { newPost, uploadedURL } from '@/assets/appwritedb'
 import { useRouter } from 'expo-router'
+import { AuthContext } from '../AuthContext'
 
 const createPost = () => {
+  const {setLoading , name} = useContext(AuthContext)
   const [text , setText] = useState('');
   const [selectedImage , setSelectedImage] = useState('');
-  const [username , setUserame] = useState('Dear Student');
   const router = useRouter();
-  useEffect(()=>{
-    getUser()
-  },[])
-  const getUser = async ()=>{
-    const result = await CheckLoginStates();
-    setUserame(result.name)
-  }
+  
   const pickImage = async() => {
+    
     const {states} =  await ImagePicker.requestMediaLibraryPermissionsAsync();
     // if (states !== 'granted'){
     //   Alert.alert('Permission Required',
@@ -35,21 +31,26 @@ const createPost = () => {
   }
 
   const post = async () => {
+    setLoading(true)
     let url = '';
   if (selectedImage) 
     url = await uploadedURL(selectedImage);
-    await newPost(username,text,url)
+  
+    await newPost(name,text,url)
+    setLoading(false)
     setText(null);
     setSelectedImage(null);
+    
     router.replace('/')
+    
   }
   return (
-    <SafeAreaView>
+    
       <ScrollView>
       <View style={style.container}>
       <View style={{flexDirection: 'row', }}>
               <Image source={14} style={style.pfpStyle}/> 
-              <Text style={style.usernameStyle}>{username}</Text>
+              <Text style={style.nameStyle}>{name}</Text>
               <TouchableOpacity style={style.options}>
                   <Text style={{fontSize: 20,fontWeight: 'bold'}}>...</Text>
               </TouchableOpacity>
@@ -81,7 +82,7 @@ const createPost = () => {
         </View>
       </View>
       </ScrollView>
-    </SafeAreaView>
+    
   )
 }
 
@@ -107,7 +108,7 @@ const style = StyleSheet.create({
         marginHorizontal: 10,
         borderRadius: 20,
     },
-    usernameStyle: {
+    nameStyle: {
         fontWeight: 'bold',
         fontSize: 18,
         color: '#414141',

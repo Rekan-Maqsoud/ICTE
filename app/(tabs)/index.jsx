@@ -19,7 +19,7 @@ const home = () => {
     setRefreshing(false)
   }
   return (
-    <SafeAreaView>
+    
       <FlatList 
       data={post || []}
       keyExtractor={item => item.$id}
@@ -27,7 +27,7 @@ const home = () => {
       refreshing={refreshing}
        onRefresh={onRefresh}
       />
-    </SafeAreaView>
+    
   )
 }
 

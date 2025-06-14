@@ -1,12 +1,12 @@
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+import {  StyleSheet, Text } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const chat = () => {
   return (
-    <SafeAreaProvider>
-      <Text style={styles.text}>Group Chats will appear Here !</Text>
-    </SafeAreaProvider>
+    <SafeAreaView>
+    <Text style={styles.text}>Group Chats will appear Here !</Text>
+    </SafeAreaView>
   )
 }
 

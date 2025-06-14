@@ -1,5 +1,5 @@
 import { createNewAccount, logIn } from '@/assets/appwritedb'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../AuthContext'
@@ -12,16 +12,18 @@ const signUp = () => {
   const [password , setPassword] = useState('')
   const [confirmPassword , setConfirmPassword] = useState('')
   const router = useRouter()
+
+
   async function handleSignUp  (){
     try{
     if(password === confirmPassword){
       await createNewAccount(email,password,name)
       const result = await logIn(email,password);
-        if(result.user){
+      
+        if(result.$id)
           setLoggedIn(true);
-          router.replace('/')
-        }
       Alert.alert('Account Successfully Created !')
+      router.replace('/')
     }
     else
     Alert.alert('Confirm Your Password correctly!')
@@ -29,6 +31,8 @@ const signUp = () => {
     console.log(error)
   }
   }
+
+
   return (
     <SafeAreaView >
       <View style={styles.container}>

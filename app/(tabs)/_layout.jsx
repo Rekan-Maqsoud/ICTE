@@ -1,11 +1,12 @@
 import {  StyleSheet } from 'react-native';
 import { Tabs } from 'expo-router';
-
 import React from 'react';
 import Icon from '@/assets/components/icon';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const _layout = () => {
   return (
+    <SafeAreaView style={{flex: 1}}>
    <Tabs
       screenOptions={{
         tabBarShowLabel: false,
@@ -13,10 +14,10 @@ const _layout = () => {
           position: 'absolute',
           backgroundColor: 'rgba(255, 255, 255, 0.5)', 
           borderRadius: 20,
-          marginHorizontal: 30,
-          marginBottom: 10,
-          height: 55,
+          marginHorizontal: 20,
+          height: 60,
           maxWidth: 600,
+          bottom: 0,
         },
         tabBarIconStyle: {
           height: '100%',
@@ -75,6 +76,7 @@ const _layout = () => {
       }}
       />
     </Tabs>
+    </SafeAreaView>
     )
 }
 
