@@ -1,8 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import { AuthContext } from '@/app/AuthContext';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { deletePost } from '../appwritedb';
+import { useRouter } from 'expo-router';
+import { Menu, Provider } from 'react-native-paper';
 
-const Post = ({ username  , postImage, postParagraph}) => {
-  const pfp = 14;
+const Post = ({$id, userId, username  , postImage, postParagraph , imageId}) => {
+  const {CurrentUser, setLoading} = useContext(AuthContext);
+    const [menuVisible, setMenuVisible] = useState(false);
+
+  const router = useRouter()
+  const pfp = 'https://fra.cloud.appwrite.io/v1/storage/buckets/6846be5400304cffc4b4/files/684da7c800163fdc3999/view?project=6846aab500310c73bd23&mode=admin';
   
   const [showFull, setShowFull] = useState(false)
   const [textShown, setTextShown] = useState(false)
@@ -10,15 +18,43 @@ const Post = ({ username  , postImage, postParagraph}) => {
   const onTextLayout = React.useCallback(e => {
     setTextShown(e.nativeEvent.lines.length > 3)
   }, [])
+  const handleDeletePost = async() => {
+    setLoading(true)
+    if (CurrentUser.$id === userId){
+      await deletePost($id, imageId || null)
+    }
+    setLoading(false)
+    router.reload()
+
+
+  }
 
   return (
+    <Provider>
     <View style={style.postCard}>
       <View style={{flexDirection: 'row'}}>
-        <Image source={pfp} style={style.pfpStyle}/> 
+        <Image source={{uri: pfp}} style={style.pfpStyle}/> 
         <Text style={style.username}>{username}</Text>
-        <TouchableOpacity style={style.options}>
-            <Text style={{fontSize: 20,fontWeight: 'bold'}}>...</Text>
-        </TouchableOpacity>
+        <Menu
+        
+          visible={menuVisible}
+          onDismiss={() => setMenuVisible(false)}
+          anchor={
+            <TouchableOpacity style={style.options} onPress={() => setMenuVisible(true)}>
+              <Text style={{fontSize: 20, fontWeight: 'bold'}}>...</Text>
+            </TouchableOpacity>
+          }
+        >
+          <Menu.Item onPress={() => { setMenuVisible(false); /* Not Interested logic */ }} title="Not Interested" />
+          {CurrentUser?.$id === userId && (
+            <Menu.Item onPress={() => { setMenuVisible(false); handleDeletePost(); }} title="Delete Post" />
+          )}
+          <Menu.Item onPress={() => { setMenuVisible(false); /* Share logic */ }} title="Share" />
+          <Menu.Item onPress={() => { setMenuVisible(false); /* Save logic */ }} title="Save" />
+        </Menu>
+      </View>
+      <View>
+
       </View>
       <View>
         <Text style={style.postText}
@@ -42,6 +78,7 @@ const Post = ({ username  , postImage, postParagraph}) => {
 
       </View>
     </View>
+    </Provider>
   )
 }
 
@@ -88,8 +125,8 @@ const style = StyleSheet.create ({
         color: '#414141',
     },
     options:{
-        position: 'absolute',
-        right: 10,
-        top: -8,
+        position: 'relative',
+        right: -10,
+        top: -5,
     }
 })

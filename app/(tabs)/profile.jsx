@@ -8,8 +8,8 @@ const profile = () => {
   const {LoggedIn, setLoggedIn , setCurrentUser, setLoading} = useContext(AuthContext);
   const router = useRouter();
   const handleLogout = async( ) => {
-    
-    if(LoggedIn) {
+    setLoading(true)
+    if(!LoggedIn) {
       setCurrentUser('')
       setLoading(false);
       router.replace('/(auth)/signIn')

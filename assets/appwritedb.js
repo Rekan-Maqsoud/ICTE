@@ -37,7 +37,8 @@ export const logIn = async(email , password) => {
 export const logout = async ()=>{
     try{
     await account.deleteSession('current')
-        }catch(error){
+        }
+        catch(error){
     Alert.alert(`${error}`);}
 }
 export const CheckLoginStates = async( ) => {
@@ -58,7 +59,9 @@ export const getPosts = async () => {
     if(documents)
         return documents;
 }
+
 export const uploadedURL = async (asset) => {
+    try{
     const response = await storage.createFile(
         postStorage, ID.unique(),await nativeImageAsset(asset)
     )
@@ -66,7 +69,12 @@ export const uploadedURL = async (asset) => {
     postStorage, 
     response.$id
     );
-    return fileUrl;
+    return {URL:fileUrl , imageId: response.$id};
+    }
+    catch(error){
+        Alert.alert(error)
+    return {URL:null , imageId: null};
+}
 }
  const nativeImageAsset = async(asset) => {
     try{
@@ -81,12 +89,24 @@ export const uploadedURL = async (asset) => {
         console.error(error)
     }
 }
-export const newPost = async(username, text,image ) => {
+export const newPost = async(userId ,username, text,image , imageId) => {
+    try{
     const post =  await database.createDocument(
         database_id,postRef,ID.unique(),{
+            userId: userId,
             username: username,
             postParagraph: text,
             postImage: image,
+            imageId: imageId,
         }
-    )
+    )}
+    catch(error){
+        Alert.alert(error)
+    }
+}
+export const deletePost = async(postId, imageId)=> {
+    await database.deleteDocument(database_id,postRef,postId);
+    if(imageId)
+    await storage.deleteFile(postStorage,imageId);
+
 }

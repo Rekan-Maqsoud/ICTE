@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router'
 import { AuthContext } from '../AuthContext'
 
 const createPost = () => {
-  const {setLoading , name} = useContext(AuthContext)
+  const {setLoading , name , CurrentUser} = useContext(AuthContext)
   const [text , setText] = useState('');
   const [selectedImage , setSelectedImage] = useState('');
   const router = useRouter();
@@ -31,15 +31,17 @@ const createPost = () => {
   }
 
   const post = async () => {
+
     setLoading(true)
-    let url = '';
-  if (selectedImage) 
-    url = await uploadedURL(selectedImage);
-    await newPost(name,text,url)
-    setLoading(false)
+    let result = {URL: null, imageId: null};
+    
+    if (selectedImage) 
+      result = await uploadedURL(selectedImage);
+    await newPost(CurrentUser.$id, name,text,result.URL || null, result.imageId || null)
+    
     setText(null);
     setSelectedImage(null);
-    
+    setLoading(false)
     router.replace('/')
     
   }
@@ -48,7 +50,7 @@ const createPost = () => {
       <ScrollView>
       <View style={style.container}>
       <View style={{flexDirection: 'row', }}>
-              <Image source={14} style={style.pfpStyle}/> 
+              <Image source={{uri: 'https://fra.cloud.appwrite.io/v1/storage/buckets/6846be5400304cffc4b4/files/684da7c800163fdc3999/view?project=6846aab500310c73bd23&mode=admin'}} style={style.pfpStyle}/> 
               <Text style={style.nameStyle}>{name}</Text>
               <TouchableOpacity style={style.options}>
                   <Text style={{fontSize: 20,fontWeight: 'bold'}}>...</Text>
@@ -61,7 +63,7 @@ const createPost = () => {
         value={text}
         multiline={true}
         onChangeText={setText}
-        maxLength={300}
+        maxLength={200}
       />
       </View>
       <View style={{marginTop: 70,}}>

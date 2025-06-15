@@ -14,13 +14,14 @@ const signIn = () => {
   useEffect( ()=>{
     init();
   }, [])
+  
   const init = async() => {
     setLoading(true);
     const result = await CheckLoginStates();
     if(result.$id){
       setLoggedIn(true)
-      await setCurrentUser(result);
-      await setName(result.name)
+      setCurrentUser(result);
+      setName(result.name)
       router.replace('/');
     }
     setLoading(false);
@@ -34,13 +35,14 @@ const signIn = () => {
       if(result){
         setLoggedIn(true);
         setCurrentUser(result);
-      setName(result.name)
+        setName(result.user.name)
         router.replace('/')
       }
       }catch(error){
         Alert.alert(`${error}`);}
       setLoading(false)
   }
+ 
   return (
     <SafeAreaView >
       <View style={styles.container}>

@@ -8,10 +8,11 @@ export const AuthProvider = ({ children }) => {
   const [LoggedIn, setLoggedIn] = useState(false);
   const [name , setName] = useState('Guest')
   const [pfp , setPfp] = useState('')
-  const [loading , setLoading] = useState(false)
+  const [loading , setLoading] = useState(true)
   const [Active, setActive] = useState(false)
   const [CurrentUser , setCurrentUser] = useState('')
   const [] = useState()
+ 
   return (
     <AuthContext.Provider value={{ 
       LoggedIn, setLoggedIn ,
