@@ -1,11 +1,10 @@
 import { AuthContext } from '@/app/AuthContext';
-import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import React, { useContext, useState , useCallback} from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable, Modal } from 'react-native'
 import { deletePost } from '../appwritedb';
 import { useRouter } from 'expo-router';
-import { Menu, Provider } from 'react-native-paper';
 
-const Post = ({$id, userId, username  , postImage, postParagraph , imageId}) => {
+const Post = ({$id, userId, username  , postImage, postParagraph , imageId , $createdAt , $updatedAt}) => {
   const {CurrentUser, setLoading} = useContext(AuthContext);
     const [menuVisible, setMenuVisible] = useState(false);
 
@@ -15,46 +14,64 @@ const Post = ({$id, userId, username  , postImage, postParagraph , imageId}) => 
   const [showFull, setShowFull] = useState(false)
   const [textShown, setTextShown] = useState(false)
 
-  const onTextLayout = React.useCallback(e => {
+  const onTextLayout = useCallback(e => {
     setTextShown(e.nativeEvent.lines.length > 3)
   }, [])
   const handleDeletePost = async() => {
     setLoading(true)
-    if (CurrentUser.$id === userId){
+    if (CurrentUser.$id === userId)
       await deletePost($id, imageId || null)
-    }
     setLoading(false)
-    router.reload()
-
-
   }
 
+  function timeAgo(dateString) {
+  const now = new Date();
+  const postDate = new Date(dateString);
+  const diff = Math.floor((now - postDate) / 1000);
+
+  if (diff < 60) return `${diff}s ago`;
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  if (diff < 2592000) return `${Math.floor(diff / 86400)}d ago`;
+  if (diff < 31536000) return `${Math.floor(diff / 2592000)}mo ago`;
+  return `${Math.floor(diff / 31536000)}y ago`;
+}
+
   return (
-    <Provider>
+  <>
+    <Pressable style={style.options} onPress={() => setMenuVisible(true)}>
+        <Text style={{fontSize: 22, fontWeight: 'bold'}}>...</Text>
+      </Pressable>
+      <Modal
+        visible={menuVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setMenuVisible(false)}
+      >
+        <Pressable style={style.menuOverlay} onPress={() => setMenuVisible(false)}>
+          <View style={style.menuModal}>
+            <Pressable style={style.menuItem} onPress={() => { setMenuVisible(false); /* Not Interested logic */ }}>
+              <Text>Not Interested</Text>
+            </Pressable>
+            {CurrentUser.$id === userId && (
+              <Pressable style={style.menuItem} onPress={() => { setMenuVisible(false); handleDeletePost(); }}>
+                <Text style={{color: 'red'}}>Delete Post</Text>
+              </Pressable>
+            )}
+            <Pressable style={style.menuItem} onPress={() => { setMenuVisible(false); /* Share logic */ }}>
+              <Text>Share</Text>
+            </Pressable>
+            <Pressable style={style.menuItem} onPress={() => { setMenuVisible(false); /* Save logic */ }}>
+              <Text>Save</Text>
+            </Pressable>
+          </View>
+        </Pressable>
+      </Modal>
     <View style={style.postCard}>
       <View style={{flexDirection: 'row'}}>
         <Image source={{uri: pfp}} style={style.pfpStyle}/> 
-        <Text style={style.username}>{username}</Text>
-        <Menu
-        
-          visible={menuVisible}
-          onDismiss={() => setMenuVisible(false)}
-          anchor={
-            <TouchableOpacity style={style.options} onPress={() => setMenuVisible(true)}>
-              <Text style={{fontSize: 20, fontWeight: 'bold'}}>...</Text>
-            </TouchableOpacity>
-          }
-        >
-          <Menu.Item onPress={() => { setMenuVisible(false); /* Not Interested logic */ }} title="Not Interested" />
-          {CurrentUser?.$id === userId && (
-            <Menu.Item onPress={() => { setMenuVisible(false); handleDeletePost(); }} title="Delete Post" />
-          )}
-          <Menu.Item onPress={() => { setMenuVisible(false); /* Share logic */ }} title="Share" />
-          <Menu.Item onPress={() => { setMenuVisible(false); /* Save logic */ }} title="Save" />
-        </Menu>
-      </View>
-      <View>
-
+        <Text style={style.username}> {username} </Text>
+        <Text style={{fontSize: 10,color: 'rgba(31,31,31,0.7)',padding:8}}>{timeAgo($createdAt)} </Text>
       </View>
       <View>
         <Text style={style.postText}
@@ -75,10 +92,9 @@ const Post = ({$id, userId, username  , postImage, postParagraph , imageId}) => 
         {postImage  &&
         (<Image style={style.postImageStyle} 
           source={{ uri: postImage}} />)}
-
       </View>
     </View>
-    </Provider>
+   </>
   )
 }
 
@@ -125,8 +141,32 @@ const style = StyleSheet.create ({
         color: '#414141',
     },
     options:{
-        position: 'relative',
-        right: -10,
-        top: -5,
-    }
+    position: 'absolute',
+    right: '8%',
+    top: 5,
+    zIndex: 10,
+    padding: 8,
+  },
+  menuOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(88, 88, 88, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  menuModal: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    minWidth: 180,
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  menuItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+  },
 })

@@ -1,6 +1,6 @@
 import { use } from "react";
 import { Alert, Platform } from "react-native";
-import { Account, Client, Databases, ID, Storage } from "react-native-appwrite";
+import { Account, Client, Databases, ID, Query, Storage } from "react-native-appwrite";
 const database_id = process.env.EXPO_PUBLIC_DB_ID;
 const profile = process.env.EXPO_PUBLIC_DB_PROFILE_ID;
 const postRef = process.env.EXPO_PUBLIC_DB_POSTS_ID;
@@ -55,7 +55,7 @@ export const CheckLoginStates = async( ) => {
 }
 
 export const getPosts = async () => {
-    const {documents , total} = await database.listDocuments(database_id, postRef)
+    const {documents , total} = await database.listDocuments(database_id, postRef,[Query.orderDesc('$createdAt'),Query.select(['$createdAt', '$id', '$updatedAt', 'imageId','postImage','postParagraph','userId','username']) ])
     if(documents)
         return documents;
 }

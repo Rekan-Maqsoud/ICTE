@@ -1,12 +1,10 @@
 import React from 'react'
 import {  StyleSheet, Text } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 const chat = () => {
   return (
-    <SafeAreaView>
     <Text style={styles.text}>Group Chats will appear Here !</Text>
-    </SafeAreaView>
+    
   )
 }
 

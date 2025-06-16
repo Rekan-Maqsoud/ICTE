@@ -1,18 +1,19 @@
-import { FlatList , View , Image } from 'react-native'
-import React, {  useCallback, useEffect, useState } from 'react'
-import {  SafeAreaView } from 'react-native-safe-area-context'
+import { FlatList} from 'react-native'
+import React, {  useCallback, useContext, useState } from 'react'
 import Post from '@/assets/components/post'
 import { getPosts} from '@/assets/appwritedb'
 import { useFocusEffect } from '@react-navigation/native'
+import { AuthContext } from '../AuthContext'
 
 const home = () => {
+  const {loading} = useContext(AuthContext)
   const [post , setPost] = useState(null);
   const [refreshing, setRefreshing] = useState(false)
   const fetchPosts = async () => {
   const posts = await getPosts()
     setPost(posts)
   }
-  useFocusEffect(useCallback(() => {fetchPosts()}, []))
+  useFocusEffect(useCallback(() => {fetchPosts()}, [loading]))
   const onRefresh = async () => {
     setRefreshing(true)
     await fetchPosts()
