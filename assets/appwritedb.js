@@ -4,6 +4,7 @@ import { Account, Client, Databases, ID, Query, Storage } from "react-native-app
 const database_id = process.env.EXPO_PUBLIC_DB_ID;
 const profile = process.env.EXPO_PUBLIC_DB_PROFILE_ID;
 const postRef = process.env.EXPO_PUBLIC_DB_POSTS_ID;
+const repliesRef = process.env.EXPO_PUBLIC_DB_REPLIES_ID;
 const postStorage = process.env.EXPO_PUBLIC_STORAGE_POSTS;
 const client = new Client()
     .setEndpoint(process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT)
@@ -109,4 +110,12 @@ export const deletePost = async(postId, imageId)=> {
     if(imageId)
     await storage.deleteFile(postStorage,imageId);
 
+}
+export const getReplies = async(postId)=>{
+    try{
+    const result = await database.listDocuments(database_id,repliesRef,[Query.equal('posts', postId), Query.select(['Reply', 'userId'])])
+    return result}
+    catch(error){
+        console.log(error)
+    }
 }

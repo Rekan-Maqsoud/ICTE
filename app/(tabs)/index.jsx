@@ -4,6 +4,7 @@ import Post from '@/assets/components/post'
 import { getPosts} from '@/assets/appwritedb'
 import { useFocusEffect } from '@react-navigation/native'
 import { AuthContext } from '../AuthContext'
+import Reply from '@/assets/components/reply'
 
 const home = () => {
   const {loading} = useContext(AuthContext)
@@ -20,7 +21,7 @@ const home = () => {
     setRefreshing(false)
   }
   return (
-    
+    <>
       <FlatList 
       data={post || []}
       keyExtractor={item => item.$id}
@@ -28,7 +29,8 @@ const home = () => {
       refreshing={refreshing}
        onRefresh={onRefresh}
       />
-    
+      <Reply />
+    </>
   )
 }
 

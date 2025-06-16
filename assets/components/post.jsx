@@ -1,14 +1,13 @@
 import { AuthContext } from '@/app/AuthContext';
-import React, { useContext, useState , useCallback} from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable, Modal } from 'react-native'
+import React, { useContext, useState , useCallback } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable, Modal, Share, Alert } from 'react-native'
 import { deletePost } from '../appwritedb';
-import { useRouter } from 'expo-router';
 
-const Post = ({$id, userId, username  , postImage, postParagraph , imageId , $createdAt , $updatedAt}) => {
-  const {CurrentUser, setLoading} = useContext(AuthContext);
-    const [menuVisible, setMenuVisible] = useState(false);
 
-  const router = useRouter()
+const Post = ({$id, userId, username  , postImage, postParagraph , imageId , $createdAt , $updatedAt }) => {
+  const {CurrentUser, setLoading , setRepliesShown, setCurrentPost} = useContext(AuthContext);
+  const [menuVisible, setMenuVisible] = useState(false);
+
   const pfp = 'https://fra.cloud.appwrite.io/v1/storage/buckets/6846be5400304cffc4b4/files/684da7c800163fdc3999/view?project=6846aab500310c73bd23&mode=admin';
   
   const [showFull, setShowFull] = useState(false)
@@ -25,18 +24,33 @@ const Post = ({$id, userId, username  , postImage, postParagraph , imageId , $cr
   }
 
   function timeAgo(dateString) {
+    let update = '';
+    let date = dateString;
+    if(dateString != $updatedAt){
+      update = 'Edited';
+      date = $updatedAt ; 
+
+    }
   const now = new Date();
-  const postDate = new Date(dateString);
+  const postDate = new Date(date);
   const diff = Math.floor((now - postDate) / 1000);
 
-  if (diff < 60) return `${diff}s ago`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  if (diff < 2592000) return `${Math.floor(diff / 86400)}d ago`;
-  if (diff < 31536000) return `${Math.floor(diff / 2592000)}mo ago`;
+  if (diff < 60) return `${update} ${diff}s ago`;
+  if (diff < 3600) return `${update} ${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${update} ${Math.floor(diff / 3600)}h ago`;
+  if (diff < 2592000) return `${update} ${Math.floor(diff / 86400)}d ago`;
+  if (diff < 31536000) return `${update} ${Math.floor(diff / 2592000)}mo ago`;
   return `${Math.floor(diff / 31536000)}y ago`;
 }
-
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: postParagraph + (postImage ? `\n${postImage}` : ''),
+      });
+    } catch (error) {
+      Alert.alert(error)
+    }
+  };
   return (
   <>
     <Pressable style={style.options} onPress={() => setMenuVisible(true)}>
@@ -58,12 +72,10 @@ const Post = ({$id, userId, username  , postImage, postParagraph , imageId , $cr
                 <Text style={{color: 'red'}}>Delete Post</Text>
               </Pressable>
             )}
-            <Pressable style={style.menuItem} onPress={() => { setMenuVisible(false); /* Share logic */ }}>
-              <Text>Share</Text>
+            <Pressable style={style.menuItem} onPress={() => { setMenuVisible(false);}}>
+              <Text>Info</Text>
             </Pressable>
-            <Pressable style={style.menuItem} onPress={() => { setMenuVisible(false); /* Save logic */ }}>
-              <Text>Save</Text>
-            </Pressable>
+            
           </View>
         </Pressable>
       </Modal>
@@ -93,6 +105,23 @@ const Post = ({$id, userId, username  , postImage, postParagraph , imageId , $cr
         (<Image style={style.postImageStyle} 
           source={{ uri: postImage}} />)}
       </View>
+      <View style={style.interact}>
+        <TouchableOpacity 
+        style={style.interactButton}
+        onPress={() => {
+          setRepliesShown(true)
+          setCurrentPost($id)
+          }}>
+          <Image style={style.interactIcons}source={require('@/assets/images/reply.png')}/>
+          <Text>Reply</Text>
+          </TouchableOpacity>
+        <TouchableOpacity 
+        onPress={handleShare} 
+        style={style.interactButton}>
+          <Image style={style.interactIcons} source={require('@/assets/images/share.png')}/>
+          <Text>Share</Text>
+          </TouchableOpacity>
+      </View>      
     </View>
    </>
   )
@@ -118,7 +147,6 @@ const style = StyleSheet.create ({
         shadowOpacity: 0.3,
         shadowRadius: 3.84,
         elevation: 5,
-        
     },
     postText: {
         padding:10,
@@ -168,5 +196,23 @@ const style = StyleSheet.create ({
   menuItem: {
     paddingVertical: 12,
     paddingHorizontal: 8,
+  },
+  interact:{
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
+  },
+  interactButton:{
+    flexDirection: 'row',
+    paddingVertical: 6,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    borderWidth: 0.3,
+    backgroundColor: 'rgba(159, 159, 159, 0.1)',
+    shadowColor: '#000',
+  },
+  interactIcons:{
+    height: 20,
+    width: 20,
+    marginRight: 10,
   },
 })

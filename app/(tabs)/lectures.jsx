@@ -1,12 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import React from 'react'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const lectures = () => {
   return (
-    
+    <>
       <Text style={styles.text}>Your Lectures Will Appear Here!</Text>
-    
+    </>
   )
 }
 

@@ -11,7 +11,8 @@ export const AuthProvider = ({ children }) => {
   const [loading , setLoading] = useState(true)
   const [Active, setActive] = useState(false)
   const [CurrentUser , setCurrentUser] = useState('')
-  const [] = useState()
+  const [repliesShown , setRepliesShown] = useState(false)
+  const [currentPost , setCurrentPost] = useState('')
  
   return (
     <AuthContext.Provider value={{ 
@@ -20,7 +21,9 @@ export const AuthProvider = ({ children }) => {
       pfp , setPfp,
       loading, setLoading,
       Active , setActive,
-      CurrentUser, setCurrentUser
+      CurrentUser, setCurrentUser,
+      repliesShown,setRepliesShown,
+      currentPost, setCurrentPost,
       }}>
         {loading && (
         <View style={styles.loadingOverlay}>

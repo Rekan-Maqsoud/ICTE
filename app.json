@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ICTE",
+    "name": "ICTE Community",
     "slug": "ICTE",
     "version": "1.0.1",
     "orientation": "portrait",
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/ict(1).png",
+        "foregroundImage": "./assets/images/ict.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
